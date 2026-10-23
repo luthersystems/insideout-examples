@@ -1,0 +1,66 @@
+# Trivy IaC exemptions for the shared security workflow (security / iac).
+# id | path | expires (YYYY-MM-DD) | issue | reason
+#
+# Why these rows: they baseline the High and Critical findings that were on
+# main when the check was turned on, so it can block new ones at once
+# without failing every PR. Each row expires; fix the finding and delete
+# its row (luthersystems/insideout-examples#4). A row for a finding kept on purpose
+# needs a real reason, not the Trivy title.
+AWS-0043 | edubot/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Elasticsearch domain uses plaintext traffic for node to node communication.
+AWS-0043 | gamestudio/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Elasticsearch domain uses plaintext traffic for node to node communication.
+AWS-0043 | revisionapp/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Elasticsearch domain uses plaintext traffic for node to node communication.
+AWS-0046 | edubot/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Elasticsearch doesn't enforce HTTPS traffic.
+AWS-0046 | gamestudio/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Elasticsearch doesn't enforce HTTPS traffic.
+AWS-0046 | revisionapp/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Elasticsearch doesn't enforce HTTPS traffic.
+AWS-0048 | edubot/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Elasticsearch domain isn't encrypted at rest.
+AWS-0048 | gamestudio/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Elasticsearch domain isn't encrypted at rest.
+AWS-0048 | revisionapp/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Elasticsearch domain isn't encrypted at rest.
+AWS-0052 | cargofit/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancers should drop invalid headers
+AWS-0052 | edubot/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancers should drop invalid headers
+AWS-0052 | guestbook/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancers should drop invalid headers
+AWS-0052 | localbook/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancers should drop invalid headers
+AWS-0052 | locallink/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancers should drop invalid headers
+AWS-0052 | revisionapp/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancers should drop invalid headers
+AWS-0052 | videostreaming/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancers should drop invalid headers
+AWS-0053 | cargofit/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancer is exposed to the internet.
+AWS-0053 | edubot/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancer is exposed to the internet.
+AWS-0053 | guestbook/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancer is exposed to the internet.
+AWS-0053 | localbook/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancer is exposed to the internet.
+AWS-0053 | locallink/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancer is exposed to the internet.
+AWS-0053 | revisionapp/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancer is exposed to the internet.
+AWS-0053 | videostreaming/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Load balancer is exposed to the internet.
+AWS-0054 | cargofit/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Use of plain HTTP.
+AWS-0054 | edubot/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Use of plain HTTP.
+AWS-0054 | guestbook/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Use of plain HTTP.
+AWS-0054 | localbook/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Use of plain HTTP.
+AWS-0054 | locallink/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Use of plain HTTP.
+AWS-0054 | revisionapp/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Use of plain HTTP.
+AWS-0054 | videostreaming/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: Use of plain HTTP.
+AWS-0095 | edubot/modules/cloudwatchmonitoring/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Unencrypted SNS topic.
+AWS-0095 | guestbook/modules/cloudwatchmonitoring/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Unencrypted SNS topic.
+AWS-0095 | inboundfund-tf/modules/cloudwatchmonitoring/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Unencrypted SNS topic.
+AWS-0095 | revisionapp/modules/cloudwatchmonitoring/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Unencrypted SNS topic.
+AWS-0104 | cargofit/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | edubot/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | edubot/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | gamestudio/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | guestbook/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | localbook/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | locallink/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | locallink/modules/elasticache/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | revisionapp/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | revisionapp/modules/elasticache/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | revisionapp/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0104 | videostreaming/modules/alb/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | CRITICAL: A security group rule should not allow unrestricted egress to any IP address.
+AWS-0126 | edubot/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Elasticsearch domain endpoint is using outdated TLS policy.
+AWS-0126 | gamestudio/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Elasticsearch domain endpoint is using outdated TLS policy.
+AWS-0126 | revisionapp/modules/opensearch/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: Elasticsearch domain endpoint is using outdated TLS policy.
+AWS-0132 | cargofit/modules/s3/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: S3 encryption should use Customer Managed Keys
+AWS-0132 | edubot/modules/s3/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: S3 encryption should use Customer Managed Keys
+AWS-0132 | gamestudio/modules/s3/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: S3 encryption should use Customer Managed Keys
+AWS-0132 | guestbook/modules/s3/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: S3 encryption should use Customer Managed Keys
+AWS-0132 | inboundfund-tf/modules/s3/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: S3 encryption should use Customer Managed Keys
+AWS-0132 | localbook/modules/s3/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: S3 encryption should use Customer Managed Keys
+AWS-0132 | locallink/modules/s3/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: S3 encryption should use Customer Managed Keys
+AWS-0132 | revisionapp/modules/s3/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: S3 encryption should use Customer Managed Keys
+AWS-0132 | videostreaming/modules/s3/main.tf | 2027-01-31 | luthersystems/insideout-examples#4 | HIGH: S3 encryption should use Customer Managed Keys
