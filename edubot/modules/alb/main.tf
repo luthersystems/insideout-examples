@@ -8,6 +8,10 @@ terraform {
   }
 }
 
+# The VPC's CIDR bounds the ALB's egress (see the egress rule below).
+data "aws_vpc" "this" {
+  id = var.vpc_id
+}
 
 # Security group for the public ALB
 resource "aws_security_group" "alb_sg" {
@@ -33,12 +37,19 @@ resource "aws_security_group" "alb_sg" {
     cidr_blocks = var.allow_cidrs
   }
 
-  # Outbound
+  # Outbound: only to the targets, on the target port. An ALB opens
+  # connections only to its targets and their health checks (both on
+  # var.target_port, the "traffic-port" default), and every target is in
+  # this VPC; it never needs to reach the internet. A Lambda target is
+  # invoked through the Lambda API, not through this rule. Leaving egress
+  # open to 0.0.0.0/0 would let a compromised or misrouted ALB reach any
+  # address (Trivy AWS-0104).
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    description = "To targets in the VPC"
+    from_port   = var.target_port
+    to_port     = var.target_port
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.this.cidr_block]
   }
 
   tags = merge({ Name = "${var.project}-alb-sg" }, var.tags)
@@ -53,6 +64,11 @@ resource "aws_lb" "alb" {
   subnets            = var.public_subnet_ids
 
   enable_deletion_protection = var.enable_deletion_protection
+
+  # Drop requests whose header names are not valid HTTP. Targets would
+  # otherwise get headers that a proxy and an app parse differently, the
+  # raw material of request smuggling (Trivy AWS-0052).
+  drop_invalid_header_fields = true
 
   tags = merge({ Name = "${var.project}-alb" }, var.tags)
 }
@@ -116,8 +132,10 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.alb.arn
   port              = 443
   protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = var.certificate_arn
+  # TLS 1.2 and 1.3 only, forward-secret ciphers. The 2016-08 policy still
+  # allowed TLS 1.0 and 1.1.
+  ssl_policy      = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn = var.certificate_arn
 
   default_action {
     type             = "forward"

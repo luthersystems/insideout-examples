@@ -16,9 +16,57 @@ locals {
 # -----------------------------------------------------------------------------
 # Alarm notifications
 # -----------------------------------------------------------------------------
+# A customer managed key encrypts the alarm topic (Trivy AWS-0095): alarm
+# messages name the stack's instances, databases and queues. The AWS managed
+# key aws/sns cannot be used here, because its key policy does not let
+# CloudWatch publish to the topic; this key's policy does.
+data "aws_caller_identity" "current" {}
+
+data "aws_iam_policy_document" "alarms_key" {
+  # The account administers the key through IAM, as with any default key
+  # policy, so the key can never become unmanageable.
+  statement {
+    sid       = "AccountAdministersKey"
+    effect    = "Allow"
+    actions   = ["kms:*"]
+    resources = ["*"]
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+  }
+
+  # CloudWatch alarms in this account publish to the encrypted topic, which
+  # needs a data key from this key.
+  statement {
+    sid       = "CloudWatchPublishesAlarms"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt", "kms:GenerateDataKey*"]
+    resources = ["*"]
+    principals {
+      type        = "Service"
+      identifiers = ["cloudwatch.amazonaws.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+  }
+}
+
+resource "aws_kms_key" "alarms" {
+  description             = "Encrypts the ${var.project} CloudWatch alarm topic"
+  enable_key_rotation     = true
+  deletion_window_in_days = 30
+  policy                  = data.aws_iam_policy_document.alarms_key.json
+  tags                    = var.tags
+}
+
 resource "aws_sns_topic" "alarms" {
-  name = "${var.project}-cw-alarms"
-  tags = var.tags
+  name              = "${var.project}-cw-alarms"
+  kms_master_key_id = aws_kms_key.alarms.arn
+  tags              = var.tags
 }
 
 resource "aws_sns_topic_subscription" "emails" {
