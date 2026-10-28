@@ -17,3 +17,8 @@ output "bucket_regional_domain_name" {
   value       = aws_s3_bucket.this.bucket_regional_domain_name
   description = "Regional bucket domain name"
 }
+
+output "kms_key_arn" {
+  value       = aws_kms_key.bucket.arn
+  description = "ARN of the KMS key that encrypts the bucket"
+}

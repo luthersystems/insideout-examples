@@ -29,12 +29,13 @@ resource "aws_security_group" "redis" {
     cidr_blocks = var.allowed_cidr_blocks
   }
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # No egress on purpose. Redis only answers clients on 6379; its nodes
+  # open no connections through this group (AWS runs replication and
+  # snapshots itself). An empty list makes Terraform delete the allow-all
+  # rule AWS adds to a new group, and the old 0.0.0.0/0 rule on a group made
+  # before this change, so the cache cannot be used to reach the internet
+  # (Trivy AWS-0104). Leaving egress out would keep that old rule.
+  egress = []
 
   tags = merge({ Name = "${var.project}-redis-sg" }, var.tags)
 }
