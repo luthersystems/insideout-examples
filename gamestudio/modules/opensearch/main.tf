@@ -9,7 +9,7 @@ resource "aws_security_group" "opensearch" {
   vpc_id      = var.vpc_id
 
   # HTTPS from inside the VPC only. The domain sits in a private subnet, so
-  # its clients (Lambda, EC2, Bedrock through the VPC) are all in the VPC.
+  # the stack's own clients (Lambda, EC2) reach it from inside the VPC.
   ingress {
     description = "HTTPS from the VPC"
     from_port   = 443
